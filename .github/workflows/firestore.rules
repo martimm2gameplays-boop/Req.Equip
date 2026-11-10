@@ -1,0 +1,73 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function normalizedEmail() {
+      return signedIn() && request.auth.token.email is string
+        ? request.auth.token.email.lower()
+        : "";
+    }
+
+    function authorizedStudent() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && exists(/databases/$(database)/documents/authorizedUsers/$(normalizedEmail()))
+        && get(/databases/$(database)/documents/authorizedUsers/$(normalizedEmail())).data.active == true;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function validRequest(data) {
+      return data.keys().hasAll([
+          'codigo', 'uid', 'email', 'requisitante', 'equipamento',
+          'dataPedido', 'devolucaoPrevista', 'estado', 'observacoes', 'criadoEm'
+        ])
+        && data.keys().hasOnly([
+          'codigo', 'uid', 'email', 'requisitante', 'equipamento',
+          'dataPedido', 'devolucaoPrevista', 'estado', 'observacoes', 'criadoEm'
+        ])
+        && data.codigo is string
+        && data.uid is string
+        && data.email is string
+        && data.requisitante is string
+        && data.equipamento in ['Portátil01', 'Portátil02', 'Tablet01', 'Tablet02', 'Projetor01']
+        && data.dataPedido is string
+        && data.devolucaoPrevista is string
+        && data.devolucaoPrevista >= data.dataPedido
+        && data.estado == 'Pendente'
+        && data.observacoes is string
+        && data.observacoes.size() <= 500
+        && data.criadoEm == request.time;
+    }
+
+    match /authorizedUsers/{email} {
+      allow read: if signedIn() && normalizedEmail() == email;
+      allow write: if false;
+    }
+
+    match /requisicoes/{requestId} {
+      allow create: if authorizedStudent()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == normalizedEmail()
+        && validRequest(request.resource.data);
+      allow read: if authorizedStudent()
+        && (resource.data.uid == request.auth.uid || isAdmin());
+      allow update, delete: if isAdmin();
+    }
+
+    match /admins/{adminUid} {
+      allow read: if signedIn() && request.auth.uid == adminUid;
+      allow write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
