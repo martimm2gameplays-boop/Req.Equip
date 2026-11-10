@@ -65,11 +65,10 @@ if (!configured) {
   loginButton.addEventListener("click", async () => {
     hideNotice();
     try {
-const provider = new OAuthProvider("microsoft.com");
-
-provider.setCustomParameters({
-  prompt: "select_account",
-  tenant: "4334e4b0-48f4-4a76-ae54-cec847437a72"});
+      const provider = new OAuthProvider("microsoft.com");
+      provider.setCustomParameters({
+      prompt: "select_account",
+      tenant: "4334e4b0-48f4-4a76-ae54-cec847437a72"});
     } catch (error) {
       showNotice(errorMessage(error), "error");
     }
@@ -113,9 +112,13 @@ provider.setCustomParameters({
     submitButton.disabled = true;
     submitButton.textContent = "A enviar…";
     try {
-      const email = (currentUser.email || "").toLowerCase();
-      if (!email) throw new Error("A conta autenticada não devolveu um email. Contacta a professora.");
-      const codigo = `REQ-${dataPedido.replaceAll("-", "")}-${crypto.randomUUID().slice(0,4).toUpperCase()}`;
+      const email = (user.email || "").toLowerCase();
+
+      if (!email.endsWith("@alunos.epbjc.pt")) {
+        await signOut(auth);
+        showNotice("Utiliza a tua conta institucional EPBJC.", "error");
+        return;
+      }
       await addDoc(collection(db, "requisicoes"), {
         codigo,
         uid: currentUser.uid,
