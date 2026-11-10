@@ -7,11 +7,15 @@ import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serve
  * Substitui os valores abaixo pelos dados da aplicação Web Firebase da EPBJC.
  * Nunca coloques aqui Client Secrets da Microsoft ou service-account.json.
  */
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "SUBSTITUIR_API_KEY",
-  authDomain: "SUBSTITUIR_PROJECT_ID.firebaseapp.com",
-  projectId: "SUBSTITUIR_PROJECT_ID",
-  appId: "SUBSTITUIR_APP_ID"
+  apiKey: "AIzaSyCQokGzmwTOJpiqgHxrZaxW0ESaKR1ybyU",
+  authDomain: "epbjc-teste.firebaseapp.com",
+  projectId: "epbjc-teste",
+  storageBucket: "epbjc-teste.firebasestorage.app",
+  messagingSenderId: "748150570601",
+  appId: "1:748150570601:web:b1c7cff67632cb334eecf8",
+  measurementId: "G-E063QBMQFS"
 };
 
 const configured = !Object.values(firebaseConfig).some(value => String(value).startsWith("SUBSTITUIR"));
