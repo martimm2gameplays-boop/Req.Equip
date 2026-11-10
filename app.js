@@ -65,9 +65,11 @@ if (!configured) {
   loginButton.addEventListener("click", async () => {
     hideNotice();
     try {
-      const provider = new OAuthProvider("microsoft.com");
-      provider.setCustomParameters({ prompt: "select_account" });
-      await signInWithPopup(auth, provider);
+const provider = new OAuthProvider("microsoft.com");
+
+provider.setCustomParameters({
+  prompt: "select_account",
+  tenant: "4334e4b0-48f4-4a76-ae54-cec847437a72"});
     } catch (error) {
       showNotice(errorMessage(error), "error");
     }
