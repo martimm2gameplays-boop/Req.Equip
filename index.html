@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123b68">
+  <title>Requisição de Equipamentos | EPBJC</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark" aria-hidden="true">E</div>
+    <div><p class="eyebrow">EPBJC · TGPSI</p><h1>Requisição de Equipamentos</h1></div>
+    <span class="status-pill">Portal do aluno</span>
+  </header>
+
+  <main class="container">
+    <section class="intro">
+      <p class="eyebrow">SERVIÇOS ESCOLARES</p>
+      <h2>Equipamento certo, pedido simples.</h2>
+      <p>Inicia sessão com a tua conta Microsoft institucional para pedir equipamento e acompanhar o estado da requisição.</p>
+    </section>
+
+    <section class="panel auth-panel" aria-labelledby="auth-title">
+      <div>
+        <h2 id="auth-title">Acesso institucional</h2>
+        <p id="auth-message" class="muted">Inicia sessão para aceder ao formulário e ao histórico dos teus pedidos.</p>
+      </div>
+      <div class="auth-actions">
+        <span id="user-label" class="user-label" hidden></span>
+        <button id="login-button" class="button primary" type="button">Entrar com Microsoft</button>
+        <button id="logout-button" class="button secondary" type="button" hidden>Terminar sessão</button>
+      </div>
+    </section>
+
+    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+    <section id="app-content" class="content-grid" hidden>
+      <section class="panel">
+        <div class="section-heading">
+          <div><p class="eyebrow">NOVO PEDIDO</p><h2>Requisitar equipamento</h2></div>
+          <span class="step-number">01</span>
+        </div>
+        <form id="request-form">
+          <label for="equipment">Equipamento</label>
+          <select id="equipment" name="equipment" required>
+            <option value="">Seleciona o equipamento</option>
+            <option>Portátil01</option><option>Portátil02</option>
+            <option>Tablet01</option><option>Tablet02</option><option>Projetor01</option>
+          </select>
+
+          <div class="form-row">
+            <div><label for="request-date">Data do pedido</label><input id="request-date" name="request-date" type="date" required></div>
+            <div><label for="return-date">Devolução prevista</label><input id="return-date" name="return-date" type="date" required></div>
+          </div>
+
+          <label for="notes">Observações <span class="muted">(opcional, até 500 caracteres)</span></label>
+          <textarea id="notes" name="notes" maxlength="500" rows="3" placeholder="Indica informação relevante para o pedido."></textarea>
+          <p class="form-hint">O pedido será criado com o estado <strong>Pendente</strong>.</p>
+          <button class="button primary full-width" type="submit" id="submit-button">Enviar requisição</button>
+        </form>
+      </section>
+
+      <section class="panel history-panel">
+        <div class="section-heading">
+          <div><p class="eyebrow">ACOMPANHAMENTO</p><h2>Os meus pedidos</h2></div>
+          <span class="step-number">02</span>
+        </div>
+        <p class="muted">Só são apresentados pedidos associados à tua conta.</p>
+        <div id="requests-list" class="requests-list"><p class="muted">A carregar pedidos…</p></div>
+      </section>
+    </section>
+
+    <section id="setup-warning" class="panel setup-warning" hidden>
+      <h2>Configuração necessária</h2>
+      <p>Antes de utilizar a aplicação, o responsável deve configurar o Firebase em <code>app.js</code>, ativar o fornecedor Microsoft e publicar as regras de segurança indicadas em <code>firestore.rules</code>.</p>
+    </section>
+
+    <footer><span>EPBJC · Programação e Sistemas de Informação</span><span>Módulo 12 — Introdução aos Sistemas de Informação</span></footer>
+  </main>
+</body>
+</html>
